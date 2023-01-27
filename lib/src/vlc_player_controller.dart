@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -143,6 +142,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
   final List<RendererCallback> _onRendererEventListeners = [];
 
   bool _isDisposed = false;
+  StreamController<dynamic> eventsStream = StreamController.broadcast();
 
   VlcAppLifeCycleObserver? _lifeCycleObserver;
 
@@ -196,6 +196,7 @@ class VlcPlayerController extends ValueNotifier<VlcPlayerValue> {
       if (_isDisposed) {
         return;
       }
+      eventsStream.add(event);
 
       switch (event.mediaEventType) {
         case VlcMediaEventType.opening:
